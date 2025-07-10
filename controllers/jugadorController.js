@@ -1,7 +1,25 @@
 const Jugador = require('../models/Jugador');
 const path = require('path');
-const multer = require('multer');
 const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'jugadores',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+  },
+});
+
+const multer = require('multer');
+const upload = multer({ storage: storage });
 
 // @desc    Obtener todos los jugadores
 // @route   GET /api/jugadores
@@ -287,51 +305,17 @@ const agregarAsistencias = async (req, res) => {
   }
 };
 
-// Configuración de multer para /uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads'));
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const name = file.fieldname + '-' + Date.now() + ext;
-    cb(null, name);
-  }
-});
-
-function fileFilter (req, file, cb) {
-  const allowedTypes = ['image/jpeg', 'image/png'];
-  if (!allowedTypes.includes(file.mimetype)) {
-    return cb(new Error('Solo se permiten archivos JPG o PNG'));
-  }
-  cb(null, true);
-}
-
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 } // 2MB
-}).single('foto');
-
-// Antes de configurar multer, asegúrate de que la carpeta uploads existe
-const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
 // Definir la función antes de exportar
 const uploadFotoJugador = (req, res) => {
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: err.message });
-    } else if (err) {
+  upload.single('foto')(req, res, function (err) {
+    if (err) {
       return res.status(400).json({ error: err.message });
     }
     if (!req.file) {
       return res.status(400).json({ error: 'No se subió ninguna imagen' });
     }
-    // Construir la URL pública
-    const fotoUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // La URL pública de Cloudinary
+    const fotoUrl = req.file.path;
     res.json({ url: fotoUrl });
   });
 };
