@@ -1,6 +1,7 @@
 const Jugador = require('../models/Jugador');
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs');
 
 // @desc    Obtener todos los jugadores
 // @route   GET /api/jugadores
@@ -311,6 +312,12 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 } // 2MB
 }).single('foto');
 
+// Antes de configurar multer, asegúrate de que la carpeta uploads existe
+const uploadsDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Definir la función antes de exportar
 const uploadFotoJugador = (req, res) => {
   upload(req, res, function (err) {
@@ -338,4 +345,4 @@ module.exports = {
   agregarGoles,
   agregarAsistencias,
   uploadFotoJugador
-}; 
+};
