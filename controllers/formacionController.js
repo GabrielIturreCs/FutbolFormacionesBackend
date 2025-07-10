@@ -42,8 +42,8 @@ const obtenerFormaciones = async (req, res) => {
 const obtenerFormacion = async (req, res) => {
   try {
     const formacion = await Formacion.findById(req.params.id)
-      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo')
-      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo');
+      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl');
 
     if (!formacion) {
       return res.status(404).json({
@@ -318,4 +318,4 @@ module.exports = {
   removerJugador,
   actualizarPosicionJugador,
   obtenerJugadoresDisponibles
-}; 
+};
