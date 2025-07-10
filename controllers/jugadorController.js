@@ -311,7 +311,8 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 } // 2MB
 }).single('foto');
 
-exports.uploadFotoJugador = (req, res) => {
+// Definir la función antes de exportar
+const uploadFotoJugador = (req, res) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ error: err.message });
