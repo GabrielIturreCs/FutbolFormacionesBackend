@@ -17,20 +17,6 @@ const jugadorSchema = new mongoose.Schema({
     enum: ['rojo', 'azul'],
     required: [true, 'El equipo es obligatorio']
   },
-  posicion: {
-    x: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 100
-    },
-    y: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 100
-    }
-  },
   goles: {
     type: Number,
     default: 0,
@@ -56,8 +42,6 @@ const jugadorSchema = new mongoose.Schema({
 
 // Índices para mejorar el rendimiento
 jugadorSchema.index({ nombre: 1 });
-jugadorSchema.index({ equipo: 1 });
-jugadorSchema.index({ goles: -1 });
 
 // Método para agregar goles
 jugadorSchema.methods.agregarGoles = function(cantidad) {
@@ -68,12 +52,6 @@ jugadorSchema.methods.agregarGoles = function(cantidad) {
 // Método para agregar asistencias
 jugadorSchema.methods.agregarAsistencias = function(cantidad) {
   this.asistencias += cantidad;
-  return this.save();
-};
-
-// Método para actualizar posición
-jugadorSchema.methods.actualizarPosicion = function(x, y) {
-  this.posicion = { x, y };
   return this.save();
 };
 
