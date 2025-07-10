@@ -32,4 +32,7 @@ router.route('/:id/goles')
 router.route('/:id/asistencias')
   .put(agregarAsistencias);
 
+// Ruta para subir foto de jugador
+router.post('/upload-foto', jugadorController.uploadFotoJugador);
+
 module.exports = router; 

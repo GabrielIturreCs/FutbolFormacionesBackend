@@ -35,6 +35,10 @@ const jugadorSchema = new mongoose.Schema({
   activo: {
     type: Boolean,
     default: true
+  },
+  fotoUrl: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: true

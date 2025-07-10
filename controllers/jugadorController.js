@@ -1,4 +1,6 @@
 const Jugador = require('../models/Jugador');
+const path = require('path');
+const multer = require('multer');
 
 // @desc    Obtener todos los jugadores
 // @route   GET /api/jugadores
@@ -283,6 +285,48 @@ const agregarAsistencias = async (req, res) => {
   }
 };
 
+// Configuración de multer para /uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploads'));
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const name = file.fieldname + '-' + Date.now() + ext;
+    cb(null, name);
+  }
+});
+
+function fileFilter (req, file, cb) {
+  const allowedTypes = ['image/jpeg', 'image/png'];
+  if (!allowedTypes.includes(file.mimetype)) {
+    return cb(new Error('Solo se permiten archivos JPG o PNG'));
+  }
+  cb(null, true);
+}
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 2 * 1024 * 1024 } // 2MB
+}).single('foto');
+
+exports.uploadFotoJugador = (req, res) => {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    if (!req.file) {
+      return res.status(400).json({ error: 'No se subió ninguna imagen' });
+    }
+    // Construir la URL pública
+    const fotoUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json({ url: fotoUrl });
+  });
+};
+
 module.exports = {
   obtenerJugadores,
   obtenerJugadoresPorEquipo,
@@ -291,5 +335,6 @@ module.exports = {
   actualizarJugador,
   eliminarJugador,
   agregarGoles,
-  agregarAsistencias
+  agregarAsistencias,
+  uploadFotoJugador
 }; 

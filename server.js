@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/database');
 const errorHandler = require('./middleware/errorHandler');
+const path = require('path');
 
 // Conectar a la base de datos
 connectDB();
@@ -57,6 +58,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/jugadores', require('./routes/jugadores'));
 app.use('/api/partidos', require('./routes/partidos'));
 app.use('/api/formaciones', require('./routes/formaciones'));
+
+// Servir /uploads como carpeta pública
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ruta de prueba
 app.get('/', (req, res) => {
