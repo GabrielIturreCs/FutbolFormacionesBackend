@@ -87,7 +87,7 @@ const obtenerTopGoleadores = async (req, res) => {
 // @access  Public
 const crearJugador = async (req, res) => {
   try {
-    const { nombre, numero, equipo, posicion } = req.body;
+    const { nombre, numero, equipo, posicion, fotoUrl } = req.body;
 
     // Validar que el número no esté ocupado en el equipo
     if (numero) {
@@ -109,7 +109,8 @@ const crearJugador = async (req, res) => {
       nombre,
       numero,
       equipo,
-      posicion
+      posicion,
+      fotoUrl // guardar la url si viene
     });
 
     res.status(201).json({
@@ -138,7 +139,7 @@ const crearJugador = async (req, res) => {
 const actualizarJugador = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, numero, equipo, posicion, goles, asistencias } = req.body;
+    const { nombre, numero, equipo, posicion, goles, asistencias, fotoUrl } = req.body;
 
     let jugador = await Jugador.findById(id);
 
@@ -168,7 +169,7 @@ const actualizarJugador = async (req, res) => {
 
     jugador = await Jugador.findByIdAndUpdate(
       id,
-      { nombre, numero, equipo, posicion, goles, asistencias },
+      { nombre, numero, equipo, posicion, goles, asistencias, fotoUrl },
       { new: true, runValidators: true }
     );
 
