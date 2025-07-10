@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const jugadorController = require('../controllers/jugadorController');
 const jugadorSchema = new mongoose.Schema({
   nombre: {
     type: String,
