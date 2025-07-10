@@ -1,4 +1,6 @@
 const express = require('express');
+const jugadorController = require('../controllers/jugadorController');
+
 const router = express.Router();
 const {
   obtenerJugadores,
