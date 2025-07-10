@@ -13,23 +13,24 @@ connectDB();
 
 const app = express();
 
-// CORS - DEBE IR PRIMERO
-app.use((req, res, next) => {
-  const allowedOrigin = process.env.NODE_ENV === 'production' 
-    ? 'https://futbolformacionesfrontend.onrender.com'
-    : 'http://localhost:4200';
-    
-  res.header('Access-Control-Allow-Origin', allowedOrigin);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+// Permitir que Express confíe en el proxy de Render para obtener la IP real del usuario
+app.set('trust proxy', 1);
+
+// CORS seguro y flexible para producción y desarrollo
+const allowedOrigins = [
+  'https://futbolformacionesfrontend.onrender.com',
+  'http://localhost:4200'
+];
+app.use(require('cors')({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 
 // Middleware de seguridad
 app.use(helmet());
@@ -112,4 +113,4 @@ process.on('unhandledRejection', (err, promise) => {
   server.close(() => process.exit(1));
 });
 
-module.exports = app; 
+module.exports = app;
