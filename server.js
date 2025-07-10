@@ -12,6 +12,24 @@ connectDB();
 
 const app = express();
 
+// CORS - DEBE IR PRIMERO
+app.use((req, res, next) => {
+  const allowedOrigin = process.env.NODE_ENV === 'production' 
+    ? 'https://futbolformacionesfrontend.onrender.com'
+    : 'http://localhost:4200';
+    
+  res.header('Access-Control-Allow-Origin', allowedOrigin);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 // Middleware de seguridad
 app.use(helmet());
 
@@ -25,14 +43,6 @@ const limiter = rateLimit({
   }
 });
 app.use('/api/', limiter);
-
-// CORS
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://futbolformacionesfrontend.onrender.com']
-    : ['http://localhost:4200', 'http://localhost:3000'],
-  credentials: true
-}));
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
