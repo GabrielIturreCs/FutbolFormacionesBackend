@@ -63,6 +63,14 @@ app.use('/api/formaciones', require('./routes/formaciones'));
 // Servir /uploads como carpeta pública
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Servir archivos estáticos del build de Angular
+app.use(express.static(path.join(__dirname, '../dist/futbol-equipos-app')));
+
+// Redirección para rutas de SPA (Angular)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/futbol-equipos-app/index.html'));
+});
+
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.json({
