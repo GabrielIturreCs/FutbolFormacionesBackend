@@ -60,8 +60,13 @@ app.use('/api/jugadores', require('./routes/jugadores'));
 app.use('/api/partidos', require('./routes/partidos'));
 app.use('/api/formaciones', require('./routes/formaciones'));
 
-// Servir /uploads como carpeta pública
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// CORS para imágenes en /uploads
+app.use('/uploads', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://futbolformacionesfrontend.onrender.com');
+  res.header('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 // Servir archivos estáticos del build de Angular
 app.use(express.static(path.join(__dirname, '../dist/futbol-equipos-app')));
