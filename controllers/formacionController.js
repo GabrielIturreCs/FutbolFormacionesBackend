@@ -14,8 +14,8 @@ const obtenerFormaciones = async (req, res) => {
     }
 
     const formaciones = await Formacion.find(query)
-      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias')
-      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias')
+      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
       .sort({ fecha: -1 })
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit));
@@ -92,8 +92,8 @@ const crearFormacion = async (req, res) => {
     });
 
     const formacionPopulada = await Formacion.findById(formacion._id)
-      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias')
-      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias');
+      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl');
 
     res.status(201).json({
       success: true,
@@ -117,8 +117,8 @@ const actualizarFormacion = async (req, res) => {
       req.body,
       { new: true, runValidators: true }
     )
-    .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias')
-    .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias');
+    .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+    .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl');
 
     if (!formacion) {
       return res.status(404).json({
@@ -190,8 +190,8 @@ const agregarJugador = async (req, res) => {
     await formacion.agregarJugador(equipoTipo, jugadorId, posicion, numero);
 
     const formacionActualizada = await Formacion.findById(req.params.id)
-      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias')
-      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias');
+      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl');
 
     res.status(200).json({
       success: true,
@@ -231,8 +231,8 @@ const removerJugador = async (req, res) => {
     await formacion.removerJugador(equipoTipo, jugadorId);
 
     const formacionActualizada = await Formacion.findById(req.params.id)
-      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias')
-      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias');
+      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl');
 
     res.status(200).json({
       success: true,
@@ -271,8 +271,8 @@ const actualizarPosicionJugador = async (req, res) => {
     await formacion.actualizarPosicionJugador(equipoTipo, req.params.jugadorId, posicion);
 
     const formacionActualizada = await Formacion.findById(req.params.id)
-      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias')
-      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias');
+      .populate('equipos.local.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl')
+      .populate('equipos.visitante.jugadores.jugadorId', 'nombre numero goles asistencias equipo fotoUrl');
 
     res.status(200).json({
       success: true,
