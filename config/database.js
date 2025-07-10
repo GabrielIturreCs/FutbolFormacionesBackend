@@ -2,7 +2,14 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect('mongodb+srv://gabriel13iturre:uKRUhuKVkED3kdXl@futbolformacionestopbd.xtuajuh.mongodb.net/?retryWrites=true&w=majority&appName=FutbolFormacionesTopBd', {
+    // Usar la variable de entorno MONGODB_URI
+    const mongoURI = process.env.MONGODB_URI;
+    
+    if (!mongoURI) {
+      throw new Error('MONGODB_URI no está definida en las variables de entorno');
+    }
+
+    const conn = await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
