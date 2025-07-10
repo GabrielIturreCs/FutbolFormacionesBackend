@@ -16,6 +16,14 @@ const app = express();
 // Permitir que Express confíe en el proxy de Render para obtener la IP real del usuario
 app.set('trust proxy', 1);
 
+// CORS para imágenes en /uploads (debe ir antes de helmet y otros middlewares)
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://futbolformacionesfrontend.onrender.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
+
 // CORS seguro y flexible para producción y desarrollo
 const allowedOrigins = [
   'https://futbolformacionesfrontend.onrender.com',
@@ -59,14 +67,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/jugadores', require('./routes/jugadores'));
 app.use('/api/partidos', require('./routes/partidos'));
 app.use('/api/formaciones', require('./routes/formaciones'));
-
-// CORS para imágenes en /uploads
-app.use('/uploads', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://futbolformacionesfrontend.onrender.com');
-  res.header('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-}, express.static(path.join(__dirname, 'uploads')));
 
 // Servir archivos estáticos del build de Angular
 app.use(express.static(path.join(__dirname, '../dist/futbol-equipos-app')));
