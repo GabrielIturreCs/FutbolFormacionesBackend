@@ -292,7 +292,7 @@ const actualizarPosicionJugador = async (req, res) => {
 const obtenerJugadoresDisponibles = async (req, res) => {
   try {
     const jugadores = await Jugador.find({ activo: true })
-      .select('nombre numero equipo goles asistencias')
+      .select('nombre numero equipo goles asistencias fotoUrl')
       .sort({ nombre: 1 });
 
     res.status(200).json({
