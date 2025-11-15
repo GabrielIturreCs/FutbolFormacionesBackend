@@ -17,6 +17,11 @@ const jugadorSchema = new mongoose.Schema({
     enum: ['rojo', 'azul'],
     required: [true, 'El equipo es obligatorio']
   },
+  posicion: {
+    type: String,
+    trim: true,
+    maxlength: [30, 'La posición no puede tener más de 30 caracteres']
+  },
   goles: {
     type: Number,
     default: 0,

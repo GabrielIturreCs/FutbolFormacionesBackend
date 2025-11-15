@@ -136,6 +136,7 @@ const crearJugador = async (req, res) => {
       data: jugador
     });
   } catch (error) {
+    console.error('Error creando jugador:', error);
     if (error.name === 'ValidationError') {
       const mensajes = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
