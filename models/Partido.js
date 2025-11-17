@@ -112,4 +112,4 @@ partidoSchema.methods.agregarAsistencia = function(jugadorId, minuto) {
   return this.save();
 };
 
-module.exports = mongoose.model('Partido', partidoSchema); 
+module.exports = mongoose.model('Partido', partidoSchema, 'partidos'); 

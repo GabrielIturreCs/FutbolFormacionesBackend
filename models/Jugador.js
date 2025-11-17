@@ -74,4 +74,4 @@ jugadorSchema.methods.agregarAsistencias = function(cantidad) {
   return this.save();
 };
 
-module.exports = mongoose.model('Jugador', jugadorSchema); 
+module.exports = mongoose.model('Jugador', jugadorSchema, 'jugadores'); 

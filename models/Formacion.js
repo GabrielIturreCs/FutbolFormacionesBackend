@@ -438,4 +438,4 @@ formacionSchema.methods.actualizarEstadisticasJugador = function(equipoTipo, jug
   return this.save();
 };
 
-module.exports = mongoose.model('Formacion', formacionSchema); 
+module.exports = mongoose.model('Formacion', formacionSchema, 'formaciones'); 
