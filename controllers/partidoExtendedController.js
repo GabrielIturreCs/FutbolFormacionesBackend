@@ -168,7 +168,7 @@ async function actualizarEstadisticasJugador(jugadorId, estadisticas) {
     jugador.partidosJugados = (jugador.partidosJugados || 0) + 1;
 
     await jugador.save();
-    console.log(`Estadísticas actualizadas para jugador ${jugador.nombre}`);
+    console.log(`Estadísticas actualizadas para jugador ${jugador.nombre}: +1 partido jugado`);
   } catch (error) {
     console.error('Error actualizando estadísticas del jugador:', error);
     throw error;
