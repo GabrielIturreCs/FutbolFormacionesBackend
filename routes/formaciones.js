@@ -12,17 +12,24 @@ const {
   obtenerJugadoresDisponibles
 } = require('../controllers/formacionController');
 
-// Rutas para formaciones
+const {
+  crearPartidoConEstadisticas,
+  actualizarPartidoConEstadisticas,
+  calificarJugador,
+  realizarSustitucion
+} = require('../controllers/partidoExtendedController');
+
+// Rutas para formaciones/partidos
 router.route('/')
   .get(obtenerFormaciones)
-  .post(crearFormacion);
+  .post(crearPartidoConEstadisticas);
 
 router.route('/jugadores-disponibles')
   .get(obtenerJugadoresDisponibles);
 
 router.route('/:id')
   .get(obtenerFormacion)
-  .put(actualizarFormacion)
+  .put(actualizarPartidoConEstadisticas)
   .delete(eliminarFormacion);
 
 // Rutas para jugadores en formaciones
@@ -34,5 +41,12 @@ router.route('/:id/jugadores/:jugadorId')
 
 router.route('/:id/jugadores/:jugadorId/posicion')
   .put(actualizarPosicionJugador);
+
+// Rutas específicas de partido
+router.route('/:id/calificar')
+  .post(calificarJugador);
+
+router.route('/:id/sustitucion')
+  .post(realizarSustitucion);
 
 module.exports = router; 

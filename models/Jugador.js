@@ -32,6 +32,16 @@ const jugadorSchema = new mongoose.Schema({
     default: 0,
     min: 0
   },
+  tarjetasAmarillas: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  tarjetasRojas: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
   partidosJugados: {
     type: Number,
     default: 0,
