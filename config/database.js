@@ -9,14 +9,21 @@ const connectDB = async () => {
       throw new Error('MONGODB_URI no está definida en las variables de entorno');
     }
 
+    console.log('🔐 Conectando a MongoDB...');
+    console.log('📍 Host:', mongoURI.substring(0, mongoURI.indexOf('@') + 30) + '...');
+
     // IMPORTANTE: Asegurar que la URI usa el nombre correcto de la BD
     // MongoDB Atlas tiene la BD como "futbolFormaciones" (camelCase)
-    // Reemplazar "futbolformaciones" por "futbolFormaciones" si es necesario
-    mongoURI = mongoURI.replace('/futbolformaciones?', '/futbolFormaciones?');
-    mongoURI = mongoURI.replace('/futbolformaciones&', '/futbolFormaciones&');
-    
-    console.log('🔐 Conectando a MongoDB...');
-    console.log('📁 BD:', mongoURI.includes('futbolFormaciones') ? '✅ futbolFormaciones' : '❌ futbolformaciones');
+    // Si la URI tiene "futbolformaciones" (minúsculas), reemplazarla
+    const originalURI = mongoURI;
+    mongoURI = mongoURI.replace(
+      /\/futbolformaciones(\?|&|$)/gi,
+      '/futbolFormaciones$1'
+    );
+
+    if (originalURI !== mongoURI) {
+      console.log('⚠️  URI corregida: futbolformaciones → futbolFormaciones');
+    }
 
     const conn = await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
